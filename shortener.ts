@@ -69,9 +69,21 @@ export const redirectUrl = async (req: Request<ShortcodeParams>, res: Response) 
 };
 
 export const getStats = async (req: Request<ShortcodeParams>, res: Response) => {
-  // TODO: Implement stats retrieval
-  // 1. Get shortcode from req.params
-  // 2. Find stats in database
-  // 3. Return stats
-  res.status(501).json({ error: "Not implemented" });
+  try {
+    // 1. Get shortcode from req.params
+    const shortCode = req.params.shortcode;
+
+    // 2. Find stats in database
+    const redirect = await Redirect.findOne({ id: shortCode });
+
+    // 3. Return stats
+    if (!redirect) {
+      return res.status(404).json({ error: "Not found" });
+    }
+    
+    res.status(200).json({ clicks: redirect.clicks });
+
+  } catch (error) {
+    res.status(500).json({error: "Internal server error" });
+  }
 };
