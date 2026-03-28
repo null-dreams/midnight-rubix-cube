@@ -19,10 +19,23 @@ export const createShortUrl = async (
     const url = req.body.url;
 
     // 2. Validate URL
+    if (!url) {
+      res.status(400).json({ error: "URL is required" });
+      return;
+    } 
+
+    let parsedURL: URL;
+
     try {
-      new URL(url);
-    } catch {
-      return res.status(400).json({ error: "Invalid URL" });
+      parsedURL = new URL(url);
+    } catch (err) {
+      res.status(400).json({ error: "Invalid URL"});
+      return;
+    }
+
+    if(!["http", "https"].includes(parsedURL.protocol)) {
+      res.status(400).json({ error: "URL must begin with http:// or https://"});
+      return;
     }
 
     // Create encoding
