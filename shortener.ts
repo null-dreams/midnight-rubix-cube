@@ -10,11 +10,14 @@ interface ShortcodeParams {
   shortcode: string;
 }
 
-export const createShortUrl = async (req: Request<{}, any, CreateShortUrlBody>, res: Response) => {
+export const createShortUrl = async (
+  req: Request<{}, any, CreateShortUrlBody>,
+  res: Response,
+) => {
   try {
     // 1. Get original URL from req.body
     const url = req.body.url;
-    
+
     // 2. Validate URL
     try {
       new URL(url);
@@ -22,16 +25,8 @@ export const createShortUrl = async (req: Request<{}, any, CreateShortUrlBody>, 
       return res.status(400).json({ error: "Invalid URL" });
     }
 
-    // 3. Generate shortcode
-    const tsBuffer = Buffer.alloc(6);
-    tsBuffer.writeUIntBE(Date.now(), 0, 0);
-    const randomBuffer = crypto.randomBytes(6);
-    
-    // Combine timestamp and random bytes into a single buffer
-    const combinedBuffer = Buffer.concat([tsBuffer, randomBuffer]);
-    
-    // Create combined encoding
-    const shortCode = combinedBuffer.toString("base64url");
+    // Create encoding
+    const shortCode = crypto.randomBytes(6).toString("base64url");
 
     // 4. Save to database
     const redirect = new Redirect({ id: shortCode, url });
@@ -46,21 +41,24 @@ export const createShortUrl = async (req: Request<{}, any, CreateShortUrlBody>, 
   }
 };
 
-export const redirectUrl = async (req: Request<ShortcodeParams>, res: Response) => {
+export const redirectUrl = async (
+  req: Request<ShortcodeParams>,
+  res: Response,
+) => {
   try {
     const shortCode = req.params.shortcode;
-    
+
     // Find original URL in database and increment clicks
     const redirect = await Redirect.findOneAndUpdate(
       { id: shortCode },
-      { $inc: { clicks: 1 } }
+      { $inc: { clicks: 1 } },
     );
-    
+
     // If not found, return 404
     if (!redirect) {
       return res.status(404).json({ error: "Not found" });
     }
-    
+
     // If found, redirect to original URL
     res.redirect(redirect.url);
   } catch (error) {
@@ -68,7 +66,10 @@ export const redirectUrl = async (req: Request<ShortcodeParams>, res: Response) 
   }
 };
 
-export const getStats = async (req: Request<ShortcodeParams>, res: Response) => {
+export const getStats = async (
+  req: Request<ShortcodeParams>,
+  res: Response,
+) => {
   try {
     // 1. Get shortcode from req.params
     const shortCode = req.params.shortcode;
@@ -80,10 +81,9 @@ export const getStats = async (req: Request<ShortcodeParams>, res: Response) => 
     if (!redirect) {
       return res.status(404).json({ error: "Not found" });
     }
-    
-    res.status(200).json({ clicks: redirect.clicks });
 
+    res.status(200).json({ clicks: redirect.clicks });
   } catch (error) {
-    res.status(500).json({error: "Internal server error" });
+    res.status(500).json({ error: "Internal server error" });
   }
 };
