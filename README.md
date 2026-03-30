@@ -1,46 +1,65 @@
 # Midnight Rubix Cube: URL Shortener
 
-A lightweight, robust URL shortening service built with Node.js, Express, TypeScript, and MongoDB.
+A full-stack, robust URL shortening service. It features a modern, responsive frontend built with Next.js and Tailwind CSS, backed by a Node.js, Express, and MongoDB API.
 
 ## Table of Contents
 - [Features](#features)
 - [Tech Stack](#tech-stack)
+- [Project Structure](#project-structure)
 - [Current Status](#current-status)
 - [Future Scope](#future-scope)
 
 ## Features
 
 - **Shorten URLs**: Converts long URLs into small, shareable base64url-encoded shortcodes.
+- **QR Code Generation**: Instantly generates downloadable QR codes for any shortened link.
 - **Redirection**: Seamlessly redirects users from a shortcode to the original destination.
-- **Analytics**: Basic endpoint to retrieve click statistics for a specific shortcode.
-- **Linting & Formatting**: Clean code enforced automatically with ESLint and Prettier.
+- **Analytics**: Endpoints to retrieve click statistics for specific shortcodes.
+- **Modern UI**: A premium, responsive interface engineered with Next.js and Tailwind CSS.
+- **Seamless API Integration**: Frontend proxy rewrites to communicate fluidly with the backend API.
 
 ## Tech Stack
 
+> **Note**: The modern frontend UI, design aesthetic, and seamless integration into this project were primarily developed using an AI agentic workflow.
+
+### Frontend
+- **Framework**: Next.js (React)
+- **Styling**: Tailwind CSS (v4)
+- **Language**: TypeScript
+
+### Backend
 - **Runtime**: Node.js
 - **Framework**: Express.js
-- **Language**: TypeScript (v5.4)
 - **Database**: MongoDB with Mongoose ORM
-- **Tooling**: ESLint, Prettier
+- **Language**: TypeScript
+- **Tooling**: ESLint, Prettier, tsx
+
+## Project Structure
+
+The repository is organized into two main directories:
+- `/frontend`: Contains the Next.js UI application.
+- `/backend`: Contains the Node.js/Express API server, database models, and entry points.
 
 ## Current Status
-*The project is currently in the active development phase. The foundation is complete.*
 
-- Basic routing and controllers (`createUrl`, `redirectUrl`, `getStats`) are scaffolded.
-- Database integration with Mongoose and model definitions are implemented.
-- Strict static code analysis and auto-formatting are set up with ESLint (Flat Config) and Prettier.
+*The project's MVP features and user-facing frontend are currently implemented.*
+
+- **Backend Architecture**: Fully organized into a dedicated `backend` directory. Core endpoints (routing, URL creation, and QR code generation) are deployed.
+- **Frontend Application**: Built and fully connected to the backend API. Features highly polished aesthetics and interactive real-time data flow.
+- **Code Quality**: Strict static code analysis and auto-formatting are active across the project using ESLint and Prettier.
 
 ## Future Scope
-We are working on expanding the capabilities and robustness of the application. Next up on the roadmap:
 
-### 1. Advanced Analytics & Tracking
+Development is ongoing to expand system capabilities. Next major roadmap items include:
 
-- Store granular access metadata such as timestamps, IP addresses (hashed), and referrers for detailed analytics tracking.
+### 1. Authentication & User Accounts
+- **User Management**: Support for user creation and authentication to enable link management and referral tracking.
+- **Private Dashboards**: Build private analytics dashboard sections specifically for authenticated users to manage their URLs.
 
-### 2. General Hardening
-- **Global Error Handling**: Implement robust global error-handling middlewares to catch asynchronous issues effectively without application crashes.
-- **Advanced Validation**: Go beyond the built-in `URL` constructor to mandate secure schemas (e.g., `http://` or `https://`).
+### 2. Advanced Analytics & Tracking
+- **Granular Data**: Store detailed access metadata (timestamps, hashed IP addresses, and HTTP referrers) to provide better tracking analytics.
 
-### 3. CI/CD & Testing
-- Establish an automated testing pipeline using Jest/Supertest for API endpoints.
-- Configure CI checks to enforce type-checking and linting automatically.
+### 3. Hardening & Deployment
+- **Global Error Handling**: Add robust global error middlewares to gracefully catch and handle asynchronous issues.
+- **Containerization**: Prepare `Dockerfile` and `docker-compose.yml` configurations for deployment and easy provisioning.
+- **Automated Testing**: Establish an automated testing pipeline using Jest/Supertest with CI pipelines via GitHub Actions.
