@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createShortUrl, redirectUrl, getStats } from "./shortener.js";
+import { createShortUrl, redirectUrl, getStats, generateQRCode } from "./shortener.js";
 
 const router = Router();
 
@@ -11,5 +11,8 @@ router.get("/:shortcode", redirectUrl);
 
 // Endpoint for getting usage statistics of a short code
 router.get("/:shortcode/stats", getStats);
+
+// Endpoint for generating QR Code of a short code
+router.get("/:shortcode/qr", generateQRCode);
 
 export default router;

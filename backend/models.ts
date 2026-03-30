@@ -11,4 +11,12 @@ const schema = new mongoose.Schema(
 
 schema.index({ id: 1 });
 
+const stats = new mongoose.Schema(
+  {
+    id: { type: String, required: true},
+    clicks: { type: Number, default: 0},
+  },
+  { timestamps: true },
+)
+
 export const Redirect = mongoose.model("Redirect", schema);
